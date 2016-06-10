@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define PASSWORD "b"
 
@@ -7,27 +8,32 @@ int process_input(char* word) {
 	//check for correct password
 	if (strcmp(word, PASSWORD) == 0) {
 		printf("Access granted.\n");
-		return 1;
+		return 0;
 	}
 	printf("Incorrect password.\n");
-	return 0;
+	return 1;
 }
 
 int main(int argc, char** argv) {
-	int access_granted = 0;
-	while (!access_granted) {
-		//get input 
-		char word[256];
-		fgets(word, sizeof(word), stdin);
-		
-		//remove newline from input
-		char* pos;
-		if ((pos = strchr(word, '\n')) != NULL) {
-			*pos = '\0';
-		}
-
-		//test input
-		access_granted = process_input(word);
+	if (argc == 1) {
+		printf("Please pass a password.");
+		return 1;
 	}
-	return 0;
+
+	//create string from arguments
+	int i, v = 0, size = argc - 1;
+
+	char* password = (char*)malloc(v);
+	for (i = 1; i <= size; i++) {
+		password = (char*)realloc(password, (v + strlen(argv[i])));
+		strcat(password, argv[i]);
+
+		//if this is not the last element, add a space
+		if (i != size) {
+			strcat(password, " ");
+		}
+	}
+
+	//test input
+	return process_input(password);
 }
