@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define PASSWORD "b"
+#define PASSWORD "y"
 
 int process_input(char* word) {
 	//check for correct password
@@ -16,7 +16,7 @@ int process_input(char* word) {
 
 int main(int argc, char** argv) {
 	if (argc == 1) {
-		printf("Please pass a password.");
+		printf("Please pass a password.\n");
 		return 1;
 	}
 
