@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define PASSWORD "y"
+#define PASSWORD "sea"
 
 int process_input(char* word) {
 	//check for correct password

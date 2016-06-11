@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 
 				clock_t end = clock();
 				double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-				printf("Completed in %f\n", time_spent);
+				printf("Completed in %f seconds\n", time_spent);
 				return 0;
 			}
 		} while(inc(guess));
