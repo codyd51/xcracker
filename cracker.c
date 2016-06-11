@@ -15,10 +15,10 @@ char* stringgen(int length) {
 	//if we reached the end of printable characters, cycle back to the beginning
 	if (ch == 127) ch = 32;
 	//the following characters trip us up, so if we're on one then skip it
-	//quote
-	if (ch == 34) ch++;
-	//ampersand
-	if (ch == 38) ch++;
+	if (ch == '\"') ch++;
+	if (ch == '&') ch++;
+	if (ch == '\\') ch++;
+	if (ch == '`') ch++;
 
 	//convert char[] to char*
 	char* ret= malloc((length + 1) * sizeof(char));
@@ -36,7 +36,10 @@ int main(int argc, char** argv) {
 		int status = system(command);
 		if (!status) {
 			//success! we found the correct password
-			printf("The password is %s\n", guess);
+			printf("\n");
+			printf("---done---\n");
+			printf("Password: %s\n", guess);
+			printf("Found in %d tries\n", i);
 			return 0;
 		}
 	}
