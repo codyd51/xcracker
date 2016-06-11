@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #define MAX_LENGTH 16
 
@@ -17,9 +18,7 @@ int inc(char* c) {
 }
 
 int main(int argc, char** argv) {
-	static int tries = 0;
-	for (int length = 1; length <= 2; length++) {
-
+	for (int length = 1; length <= MAX_LENGTH; length++) {
 		char* guess = malloc((length + 1) * sizeof(char));
 		for (int i = 1; i <= length; i++) {
 			for (int j = 0; j < i; j++) {
@@ -28,22 +27,21 @@ int main(int argc, char** argv) {
 			guess[i] = 0;
 		}
 		do {
+			static int tries = 0;
 			tries++;
 
-			char command[512];
-			sprintf(command, "./locked \"%s\"", guess);
-			int status = system(command);
-			if (!status) {
+			char input[strlen(guess) + 1];
+			sprintf(input, "./locked %s\n", guess);
+			if (!system(input)) {
 				//success! we found the correct password
 				printf("\n");
 				printf("---done---\n");
 				printf("Password: %s\n", guess);
-				printf("Found in %d tries\n", tries);
+				printf("Found in %d attempts\n", tries);
 				return 0;
 			}
 		} while(inc(guess));
 	}
-
 	//out of guesses
 	printf("Couldn't find password.");
 	return 1;
