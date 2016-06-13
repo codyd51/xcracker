@@ -54,8 +54,8 @@ int dictionary_crack(char* correct) {
 int inc(char* c) {
 	if (c[0] == 0) return 0;
 
-	if (c[0] == 'z') {
-		c[0] = 'a';
+	if (c[0] == 127) {
+		c[0] = 32;
 		return inc(c + sizeof(char));
 	}
 	c[0]++;
@@ -67,7 +67,7 @@ int brute_force_crack(char* correct) {
 		char* guess = malloc((length + 1) * sizeof(char));
 		for (int i = 1; i <= length; i++) {
 			for (int j = 0; j < i; j++) {
-				guess[j] = 'a';
+				guess[j] = 32;
 			}
 			guess[i] = 0;
 		}
