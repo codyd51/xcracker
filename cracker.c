@@ -100,8 +100,4 @@ int main(int argc, char** argv) {
 	double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 	printf("Completed in %f seconds.\n", time_spent);
 	return 0;
-
-	//out of guesses
-	printf("Couldn't find password.");
-	return 1;
 }
