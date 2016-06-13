@@ -1,8 +1,12 @@
 xcracker
 --------------
 
-xcracker is a simple password cracker. `locked.c` is a simple locked program that accepts a password as an argument. 'cracker.c' generates and attempts every possible string up to 16 characters on the locked program. When a correct password is found, the password and some statistics about the crack are printed out.
+xcracker is a simple password cracker. 
 
-Currently, xcracker only generates passwords with characters 'a'-'z' due to performance constraints. The bottleneck right now is `popen`ing the locked program every time we generate a password.
+`locked.c` is a simple locked program that accepts a password as an argument. 
+
+`cracker.c` has two stages: a dictionary attack and a brute force attack. The former tries the top 100,000 most common passwords (located in `common_pwds.txt`), and the latter generates every string and tries each.
+
+Currently, the brute-force attack only generates passwords with characters 'a'-'z' due to performance constraints. The bottleneck is the `system()` call we must make every time we test a password.
 
 MIT license.
