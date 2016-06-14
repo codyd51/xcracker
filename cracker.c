@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <time.h>
+#include <stdbool.h>
 
 #define MAX_LENGTH 16
 
@@ -14,13 +15,15 @@ int attempt_password(char* guess, char* correct) {
 	if (!correct) {
 		char input[strlen(guess) + 1];
 		sprintf(input, "./locked \"%s\"\n", guess);
-		return system(input);
+		//invert result so attempt_password returns true on success
+		return !system(input);
 	}
 	//check for correct password
-	return strcmp(guess, correct);
+	//invert result so attempt_password returns true on success
+	return !strcmp(guess, correct);
 }
 
-static int tries = 0;
+static unsigned long long tries = 0;
 
 int dictionary_crack(char* correct) {
 	FILE* file = fopen("common_pwds.txt", "r");
@@ -35,20 +38,20 @@ int dictionary_crack(char* correct) {
 			*pos = '\0';
 		}
 
-		if (!attempt_password(line, correct)) {
+		if (attempt_password(line, correct)) {
 			//found correct password!
 			printf("\n---done---\n");
 			printf("Password: %s\n", line);
-			printf("Found in %d attempts\n", tries);
+			printf("Found in %llu attempts\n", tries);
 
 			fclose(file);
 
-			return 0;
+			return true;
 		}
 	}
 	//couldn't find password!
 	fclose(file);
-	return 1;
+	return false;
 }
 
 int inc(char* c) {
@@ -73,16 +76,16 @@ int brute_force_crack(char* correct) {
 		}
 		do {
 			tries++;
-			if (!attempt_password(guess, correct)) {
+			if (attempt_password(guess, correct)) {
 				//success! we found the correct password
 				printf("\n---done---\n");
 				printf("Password: %s\n", guess);
-				printf("Found in %d attempts\n", tries);
-				return 0;
+				printf("Found in %llu attempts\n", tries);
+				return true;
 			}
 		} while(inc(guess));
 	}
-	return 1;
+	return false;
 }
 
 int main(int argc, char** argv) {
@@ -94,10 +97,10 @@ int main(int argc, char** argv) {
 
 	//try dictionary attack first
 	//attempt most common passwords
-	if (dictionary_crack(passed)) {
+	if (!dictionary_crack(passed)) {
 		//now try brute force
 		//try every possible password
-		if (brute_force_crack(passed)) {
+		if (!brute_force_crack(passed)) {
 			//out of guesses
 			printf("Couldn't find password.\n");
 			return 1;
